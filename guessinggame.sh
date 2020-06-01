@@ -3,15 +3,28 @@
 # This is a game in which you guess the number of files in a directory.
 
 echo "We are going to play a guessing game."
+files=$(pwd | ls | wc -l) 
 
+#Function to obtain the guess from the player
 function gettheguess {
-echo "Guess the number of files there are in the current directory: "
-read guess
+	echo "Guess the number of files there are in the current directory: "
+	read guess
 }
 
-gettheguess
+#function to check if the guess from the player is a number or not.
+function numberornot {
+	if ! [[ "guess" =~ ^[0-9]+$ ]]
+   		then
+    		echo "Sorry non-negative integers only"
+        	gettheguess
+     	else
+     		checktheguess
+	fi
+}
 
-files=$(pwd | ls | wc -l) 
+#function to check the guess and compare it to the correct number of files.
+function checktheguess {
+
 while [[ $guess -ne $files ]]; do
 	if [[ $guess -gt $files ]]
 	then
@@ -23,5 +36,8 @@ while [[ $guess -ne $files ]]; do
 		gettheguess
 	fi
 done
-
+}
+gettheguess
+numberornot
+checktheguess
 echo "You got it!! $guess is the number of files in the directory."
